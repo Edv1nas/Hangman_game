@@ -1,53 +1,54 @@
-class HangmanGame:
-    def __init__(self) -> None:
-        pass
-
-    def start_new_game(self):
-        pass
-
-    def make_guess(self, letter):
-        pass
-
-    def check_game_status(self):
-        pass
+import random
 
 
-class WordGenerator:
-    def __init__(self) -> None:
-        pass
+class LetterGuesser:
+    def __init__(self, word_list):
+        self.word_list = word_list
+        self.random_word = None
+        self.letters = None
+        self.guessed_letters = set()
+        self.attempts = 0
+        self.max_attempts = 10
+        self.score = None
 
-    def get_random_word(self):
-        pass
+    def count_made_attempts(self):
+        self.attempts += 1
+        return self.attempts
 
+    def count_left_attempts(self):
+        remain_attempts = self.max_attempts - self.count_made_attempts()
+        return remain_attempts
 
-class ScoreBoard:
-    def __init__(self) -> None:
-        pass
+    def get_word(self):
+        self.random_word = random.choice(self.word_list)
+        return self.random_word
 
-    def update_score(self, player, result):
-        pass
+    def split_word(self, word):
+        self.letters = list(word)
+        return self.letters
 
-    def display_scoreboard(self):
-        pass
+    def guess_letter(self, guessed_letter):
+        self.guessed_letters.add(guessed_letter)
+        return guessed_letter in self.letters
 
+    def display_word(self):
+        if self.letters is None:
+            return ""
+        displayed_word = ""
+        for letter in self.letters:
+            if letter in self.guessed_letters:
+                displayed_word += letter + " "
+            else:
+                displayed_word += "_ "
+        return displayed_word.strip()
 
-class DatabaseHandler:
-    def __init__(self) -> None:
-        pass
+    def check_win(self):
+        return set(self.random_word.lower()) == self.guessed_letters
 
-    def insert_word(self, word):
-        pass
+    def check_loss(self):
+        return self.attempts >= self.max_attempts
 
-    def get_random_word_from_db(self):
-        pass
-
-
-class UserInterface:
-    def __init__(self):
-        pass
-
-    def get_user_input(self):
-        pass
-
-    def display_message(self, message):
-        pass
+    def count_score(self):
+        attempts_left = self.count_left_attempts()
+        self.score = attempts_left * 10
+        return self.score
