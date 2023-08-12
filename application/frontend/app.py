@@ -1,10 +1,23 @@
 from forms import RegistrationForm, LoginForm
 from flask import Flask, render_template, redirect, url_for, flash
 import requests
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import LoginManager, login_user, UserMixin, login_required, logout_user
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "your_secret_key_here"
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+class User(UserMixin):
+    def __init__(self, user_id):
+        self.id = user_id
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
 
 
 @app.route('/')
@@ -41,18 +54,20 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        username = form.username.data
+        email = form.email.data
         password = form.password.data
 
         try:
             response = requests.get(
-                f"http://127.0.0.1:8000/api/v1/accounts/by_username/{username}")
+                f"http://127.0.0.1:8000/api/v1/accounts/by_email/{email}")
             if response.status_code == 200:
                 account = response.json()
                 if account and account["password"] == password:
+                    user = User(account["id"])
+                    login_user(user)
                     flash(
                         f'Login successful for {account["username"]}!', 'success')
-                    return redirect(url_for('index'))
+                    return redirect(url_for('start_game'))
                 else:
                     flash('Invalid username or password', 'danger')
             else:
@@ -61,6 +76,12 @@ def login():
             flash('An error occurred while communicating with the server', 'danger')
 
     return render_template('login.html', form=form)
+
+
+@app.route('/start_game')
+@login_required
+def start_game():
+    return render_template('start_game.html')
 
 
 @app.route('/player_stats')

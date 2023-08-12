@@ -34,6 +34,15 @@ def read_account(account_id: int, db: Session = Depends(get_db)):
     return db_account
 
 
+@router.get("/by_email/{email}", response_model=AccountResponse)
+def get_account_by_email(email: str, db: Session = Depends(get_db)):
+    account = crud.account_crud.get_account_by_email(
+        db, email=email)
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    return account
+
+
 @router.delete("/{account_id}", response_model=AccountResponse)
 def delete_account(account_id: int, db: Session = Depends(get_db)):
     try:
