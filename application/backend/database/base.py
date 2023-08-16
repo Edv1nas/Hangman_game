@@ -1,3 +1,4 @@
 from database.db import Base
 from models.account import Account
-from models.game_stats import GameStats
+from models.game import Game
+from models.letters import Letters

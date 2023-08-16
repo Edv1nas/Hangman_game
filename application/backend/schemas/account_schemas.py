@@ -1,52 +1,33 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 
-class AccountCreate(BaseModel):
+class AccountBase(BaseModel):
     username: str
-    email: EmailStr
-    password: str
+    email: str
 
-    class Config:
-        orm_mode = True
-        json_schema_extra = {
-            "example": {
-                "username": "Antis",
-                "email": "antantas123@gmail.com",
-                "password": "1234",
-            }
-        }
+
+class AccountCreate(AccountBase):
+    password: str
 
 
 class AccountResponse(BaseModel):
     id: int
     username: str
-    email: EmailStr
-    password: str
+    email: str
+    # password: str
 
     class Config:
         orm_mode = True
-        json_schema_extra = {
-            "example": {
-                "id": 1,
-                "username": "Antis",
-                "email": "antantas123@gmail.com",
-                "password": "1234",
-
-            }
-        }
 
 
-class AccountUpdate(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
+class Account(AccountBase):
+    id: int
+    total_games_played: int
+    total_wins: int
+    total_losses: int
+    win_rate: float
+    created_at: str
+    is_active: bool
 
     class Config:
         orm_mode = True
-        json_schema_extra = {
-            "example": {
-                "username": "Antis",
-                "email": "antantas123@gmail.com",
-                "password": "1234",
-            }
-        }

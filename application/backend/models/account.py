@@ -1,5 +1,6 @@
-from sqlalchemy import Boolean, Column, Integer, String, Float
+from sqlalchemy import Boolean, Column, Integer, String, Float, TIMESTAMP
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 from database.db import Base
 
@@ -15,6 +16,7 @@ class Account(Base):
     total_wins = Column(Integer)
     total_losses = Column(Integer)
     win_rate = Column(Float)
+    created_at = Column(TIMESTAMP, default=datetime.now())
     is_active = Column(Boolean, default=True)
 
-    game_stats = relationship("GameStats", back_populates="account")
+    game = relationship("Game", back_populates="account")
