@@ -24,3 +24,12 @@ def update_game_status(db: Session, game_id: int, status: str, made_tries: int):
         db.refresh(db_game)
         return db_game
     return None
+
+
+def calculate_win_loss_counts(db: Session, account_id: int):
+    total_games = db.query(Game).filter(Game.account_id == account_id).count()
+    total_wins = db.query(Game).filter(
+        Game.account_id == account_id, Game.game_status == "won").count()
+    total_losses = total_games - total_wins
+
+    return total_games, total_wins, total_losses
