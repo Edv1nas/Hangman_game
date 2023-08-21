@@ -20,6 +20,14 @@ random_words = RandomWords()
 active_games = {}
 
 
+@router.get("/games/{game_id}")
+def get_game_by_id(game_id: int, db: Session = Depends(get_db)):
+    db_game = get_game(db, game_id)
+    if db_game is None:
+        raise HTTPException(status_code=404, detail="Game not found")
+    return db_game
+
+
 @router.post("/accounts/{account_id}/games/")
 def start_new_game(account_id: int, db: Session = Depends(get_db)):
 
@@ -69,7 +77,6 @@ def make_guess(
         if active_game.check_win():
             game_status = "won"
             active_games.pop(game_id)
-            # update_game_status(db, game_id, game_status)
     else:
         active_game.count_made_attempts()
 
@@ -77,7 +84,6 @@ def make_guess(
         if active_game.check_loss():
             game_status = "lost"
             active_games.pop(game_id)
-            # update_game_status(db, game_id, game_status)
 
     update_game_status(db, game_id, game_status,
                        made_tries=active_game.attempts)
@@ -90,15 +96,41 @@ def make_guess(
     return {
         "game_status": game_status,
         "masked_word": masked_word,
-        "remaining_attempts": remaining_attempts
+        "remaining_attempts": remaining_attempts,
+        "guessed_letter": guessed_letter
     }
 
 
-@router.post("/games/{game_id}/resume/")
-def resume_game(game_id: int, db: Session = Depends(get_db)):
+# @router.post("/games/{game_id}/resume/")
+# def resume_game(game_id: int, db: Session = Depends(get_db)):
+#     db_game = get_game(db, game_id)
+#     if db_game is None:
+#         raise HTTPException(status_code=404, detail="Game not found")
+
+#     guessed_letters = get_letters_for_game(db, game_id)
+
+#     active_game = HangmanGame(db_game.word)
+#     active_game.letters = list(db_game.word)
+#     active_game.guessed_letters = set(
+#         [letter.letter for letter in guessed_letters])
+
+#     if db_game.game_status == "in_progress":
+#         active_games[game_id] = active_game
+#         return active_game
+#     else:
+#         raise HTTPException(
+#             status_code=400, detail="Cannot resume game, it's not in progress")
+
+@router.post("/accounts/{account_id}/games/{game_id}/resume/")
+def resume_game(account_id: int, game_id: int, db: Session = Depends(get_db)):
     db_game = get_game(db, game_id)
     if db_game is None:
         raise HTTPException(status_code=404, detail="Game not found")
+
+    # Check if the game belongs to the specified account
+    if db_game.account_id != account_id:
+        raise HTTPException(
+            status_code=403, detail="Game does not belong to this account")
 
     guessed_letters = get_letters_for_game(db, game_id)
 

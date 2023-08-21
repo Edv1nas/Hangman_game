@@ -3,15 +3,19 @@ from random_word import RandomWords
 
 
 class HangmanGame:
-    def __init__(self, word):
-        self.word = word
-        self.random_words = RandomWords()
+    def __init__(self) -> None:
+        self.word = ""
+        self.displayed_word = ""
         self.random_word = None
         self.letters = None
         self.guessed_letters = set()
         self.attempts = 0
         self.max_attempts = 10
-        self.score = None
+
+    def get_random_word(self) -> str:
+        random_word = RandomWords()
+        self.game_word = random_word.get_random_word()
+        return self.game_word
 
     def count_made_attempts(self):
         self.attempts += 1
@@ -33,24 +37,19 @@ class HangmanGame:
         self.guessed_letters.add(guessed_letter)
         return guessed_letter in self.letters
 
-    def display_word(self):
+    def get_displayed_word(self):
         if self.letters is None:
             return ""
-        displayed_word = ""
+        self.displayed_word = ""
         for letter in self.letters:
             if letter in self.guessed_letters:
-                displayed_word += letter + " "
+                self.displayed_word += letter + " "
             else:
-                displayed_word += "_ "
-        return displayed_word.strip()
+                self.displayed_word += "_ "
+        return self.displayed_word.strip()
 
     def check_win(self):
         return all(letter in self.guessed_letters for letter in self.letters)
 
     def check_loss(self):
         return self.attempts >= self.max_attempts
-
-    def count_score(self):
-        attempts_left = self.count_left_attempts()
-        self.score = attempts_left * 10
-        return self.score

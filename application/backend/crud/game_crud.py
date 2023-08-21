@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound
 from schemas.game_schemas import GameCreate
 from models.game import Game
+from models.account import Account
 
 
 def create_game(db: Session, game: GameCreate, account_id: int):
@@ -13,6 +15,14 @@ def create_game(db: Session, game: GameCreate, account_id: int):
 
 def get_game(db: Session, game_id: int):
     return db.query(Game).filter(Game.game_id == game_id).first()
+
+
+def get_games_by_user_id(db: Session, user_id: int) -> Account:
+    user = db.query(Account).filter(Account.id == user_id).first()
+    if user:
+        return user.games
+    else:
+        raise NoResultFound
 
 
 def update_game_status(db: Session, game_id: int, status: str, made_tries: int):

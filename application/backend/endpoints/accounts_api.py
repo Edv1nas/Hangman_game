@@ -7,23 +7,6 @@ from crud.account_crud import create_account, get_account
 from database.db import get_db
 from schemas.account_schemas import AccountCreate, AccountResponse
 
-# router = APIRouter()
-
-
-# @router.post("", response_model=AccountResponse)
-# def create_account(account: AccountCreate, db: Session = Depends(get_db)):
-#     db_account = crud.account_crud.get_account_by_email(
-#         db, email=account.email)
-#     if db_account:
-#         raise HTTPException(status_code=400, detail="Email already registered")
-#     return crud.account_crud.create_account(db=db, account=account)
-
-
-# @router.get("", response_model=list[AccountResponse])
-# def read_accounts(db: Session = Depends(get_db)):
-#     accounts = crud.account_crud.get_accounts(db)
-#     return accounts
-
 
 router = APIRouter()
 

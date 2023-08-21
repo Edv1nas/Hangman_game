@@ -14,7 +14,7 @@ class AccountResponse(BaseModel):
     id: int
     username: str
     email: str
-    # password: str
+    password: str
 
     class Config:
         orm_mode = True
