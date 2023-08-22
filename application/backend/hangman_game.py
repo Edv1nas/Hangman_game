@@ -1,16 +1,19 @@
-import random
+from sqlalchemy.orm import Session
 from random_word import RandomWords
+from models.game import Game
+import requests
 
 
 class HangmanGame:
-    def __init__(self) -> None:
+    def __init__(self):
         self.word = ""
-        self.displayed_word = ""
+        self.random_words = RandomWords()
         self.random_word = None
         self.letters = None
         self.guessed_letters = set()
         self.attempts = 0
         self.max_attempts = 10
+        self.score = None
 
     def get_random_word(self) -> str:
         random_word = RandomWords()
@@ -37,19 +40,24 @@ class HangmanGame:
         self.guessed_letters.add(guessed_letter)
         return guessed_letter in self.letters
 
-    def get_displayed_word(self):
+    def display_word(self):
         if self.letters is None:
             return ""
-        self.displayed_word = ""
+        displayed_word = ""
         for letter in self.letters:
             if letter in self.guessed_letters:
-                self.displayed_word += letter + " "
+                displayed_word += letter + " "
             else:
-                self.displayed_word += "_ "
-        return self.displayed_word.strip()
+                displayed_word += "_ "
+        return displayed_word.strip()
 
     def check_win(self):
         return all(letter in self.guessed_letters for letter in self.letters)
 
     def check_loss(self):
         return self.attempts >= self.max_attempts
+
+    def count_score(self):
+        attempts_left = self.count_left_attempts()
+        self.score = attempts_left * 10
+        return self.score

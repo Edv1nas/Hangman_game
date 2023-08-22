@@ -10,6 +10,8 @@ def create_letter(db: Session, letter: LetterCreate, game_id: int):
     db.refresh(db_letter)
     return db_letter
 
+def get_letters_by_game_id(db: Session, game_id: int):
+    return db.query(Letters).filter(Letters.game_id == game_id).all()
 
 def get_letters_for_game(db: Session, game_id: int):
     return db.query(Letters).filter(Letters.game_id == game_id).all()

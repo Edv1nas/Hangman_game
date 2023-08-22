@@ -43,3 +43,6 @@ def calculate_win_loss_counts(db: Session, account_id: int):
     total_losses = total_games - total_wins
 
     return total_games, total_wins, total_losses
+
+def get_word_by_game_id(db: Session, game_id: int):
+    return db.query(Game.word).filter(Game.game_id == game_id).first()
