@@ -79,30 +79,24 @@ class Hangman(Base):
         max_attempts = self.max_attempts,
         game_status = game_status
 
-        # Initialize the database connection
-        # Change this to your database configuration
         engine = create_engine("sqlite:///hangman_game.db")
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        # Generate a random word for the game
         self.get_random_word()
         self.split_word()
 
         while not self.check_win() and not self.check_loss():
-            # Replace with your logic for generating guesses
             guessed_letter = self.generate_guessed_letter()
 
             self.attempts += 1
             is_correct_guess = self.guess_letter(guessed_letter)
 
-            # Add entered letter to the Letter table
             entered_letter = Letter(
                 game_id=self.current_game.game_id, letter=guessed_letter)
             session.add(entered_letter)
             session.commit()
 
-            # Update game_status based on win or loss
             if self.check_win():
                 game_status = 'Victory'
             elif self.check_loss():
@@ -110,40 +104,15 @@ class Hangman(Base):
             else:
                 game_status = 'in_progress'
 
-            # Store the game data in the database
             game_data = Game(
                 game_word=self.game_word,
                 attempts=self.attempts,
                 max_attempts=self.max_attempts,
-                game_status=game_status  # Use the updated game status
+                game_status=game_status
             )
             session.add(game_data)
             session.commit()
 
-            masked_word = self.mask_game_word()  # Get the masked word
+            masked_word = self.mask_game_word()
 
         session.close()
-
-    def create_game(self, db: Session, account_id: int):
-        self.get_random_word()
-        self.split_word()
-        self.mask_game_word()  # You can call this here if needed
-
-        try:
-            game_data = Game(
-                account_id=account_id,
-                game_word=self.game_word,
-                game_created=datetime.now(),
-                attempts=self.attempts,
-                max_attempts=self.max_attempts,
-                game_status=game_status
-                # Add other relevant attributes here
-            )
-            db.add(game_data)
-            db.commit()
-            db.refresh(game_data)
-            return game_data
-        except Exception as error:
-            # Handle exceptions or errors here
-            print(f"Error creating game: {error}")
-            return None
