@@ -1,19 +1,19 @@
 from sqlalchemy.orm import Session
 from random_word import RandomWords
+from datetime import datetime
 from models.game import Game
-import requests
+from models.letters import Letter
+from crud.game_crud import get_game
 
 
-class HangmanGame:
+class Base:
     def __init__(self):
-        self.word = ""
+        self.game_word = ""
         self.random_words = RandomWords()
-        self.random_word = None
         self.letters = None
         self.guessed_letters = set()
         self.attempts = 0
         self.max_attempts = 10
-        self.score = None
 
     def get_random_word(self) -> str:
         random_word = RandomWords()
@@ -28,28 +28,22 @@ class HangmanGame:
         remain_attempts = self.max_attempts - self.attempts
         return max(remain_attempts, 0)
 
-    def get_word(self):
-        self.random_word = self.random_words.get_random_word()
-        return self.random_word
-
     def split_word(self):
-        self.letters = list(self.random_word)
+        self.letters = list(self.game_word)
         return self.letters
 
     def guess_letter(self, guessed_letter):
         self.guessed_letters.add(guessed_letter)
         return guessed_letter in self.letters
 
-    def display_word(self):
-        if self.letters is None:
-            return ""
-        displayed_word = ""
-        for letter in self.letters:
-            if letter in self.guessed_letters:
-                displayed_word += letter + " "
+    def mask_game_word(self):
+        masked_word = ""
+        for char in self.game_word:
+            if char in self.guessed_letters:
+                masked_word += char
             else:
-                displayed_word += "_ "
-        return displayed_word.strip()
+                masked_word += "_"
+        return masked_word
 
     def check_win(self):
         return all(letter in self.guessed_letters for letter in self.letters)
@@ -57,7 +51,99 @@ class HangmanGame:
     def check_loss(self):
         return self.attempts >= self.max_attempts
 
-    def count_score(self):
-        attempts_left = self.count_left_attempts()
-        self.score = attempts_left * 10
-        return self.score
+    def create_game(self, db: Session, account_id: int):
+        self.get_random_word()
+        self.split_word()
+
+        game_data = Game(
+            account_id=account_id,
+            game_date=datetime.now(),
+            game_status="in_progress",
+            attempts=self.attempts,
+            max_attempts=self.max_attempts,
+            game_word=self.game_word,
+
+        )
+        db.add(game_data)
+        db.commit()
+        db.refresh(game_data)
+        return game_data
+
+
+class Hangman(Base):
+    def play_game(self, db: Session, game_id: int, letter: str):
+        game_data = get_game(db, game_id)
+
+        game_word = self.game_word,
+        attempts = self.attempts,
+        max_attempts = self.max_attempts,
+        game_status = game_status
+
+        # Initialize the database connection
+        # Change this to your database configuration
+        engine = create_engine("sqlite:///hangman_game.db")
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        # Generate a random word for the game
+        self.get_random_word()
+        self.split_word()
+
+        while not self.check_win() and not self.check_loss():
+            # Replace with your logic for generating guesses
+            guessed_letter = self.generate_guessed_letter()
+
+            self.attempts += 1
+            is_correct_guess = self.guess_letter(guessed_letter)
+
+            # Add entered letter to the Letter table
+            entered_letter = Letter(
+                game_id=self.current_game.game_id, letter=guessed_letter)
+            session.add(entered_letter)
+            session.commit()
+
+            # Update game_status based on win or loss
+            if self.check_win():
+                game_status = 'Victory'
+            elif self.check_loss():
+                game_status = 'Defeat'
+            else:
+                game_status = 'in_progress'
+
+            # Store the game data in the database
+            game_data = Game(
+                game_word=self.game_word,
+                attempts=self.attempts,
+                max_attempts=self.max_attempts,
+                game_status=game_status  # Use the updated game status
+            )
+            session.add(game_data)
+            session.commit()
+
+            masked_word = self.mask_game_word()  # Get the masked word
+
+        session.close()
+
+    def create_game(self, db: Session, account_id: int):
+        self.get_random_word()
+        self.split_word()
+        self.mask_game_word()  # You can call this here if needed
+
+        try:
+            game_data = Game(
+                account_id=account_id,
+                game_word=self.game_word,
+                game_created=datetime.now(),
+                attempts=self.attempts,
+                max_attempts=self.max_attempts,
+                game_status=game_status
+                # Add other relevant attributes here
+            )
+            db.add(game_data)
+            db.commit()
+            db.refresh(game_data)
+            return game_data
+        except Exception as error:
+            # Handle exceptions or errors here
+            print(f"Error creating game: {error}")
+            return None
