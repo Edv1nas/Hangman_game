@@ -9,9 +9,10 @@ class Game(Base):
     game_id = Column(Integer, primary_key=True, index=True)
     account_id = Column(Integer, ForeignKey("accounts.id"))
     game_date = Column(TIMESTAMP, default=datetime.now())
-    game_status = Column(Enum('in_progress', 'Victory', 'Defeat'), nullable=False)
-    made_tries = Column(Integer, nullable=False)
-    word = Column(String(255), nullable=False)
+    game_status = Column(
+        Enum('in_progress', 'Victory', 'Defeat'), nullable=False)
+    attempts = Column(Integer, nullable=False)
+    game_word = Column(String(255), nullable=False)
 
     account = relationship("Account", back_populates="game")
     letters = relationship("Letters", back_populates="game")
