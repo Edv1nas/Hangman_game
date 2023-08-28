@@ -22,6 +22,7 @@ class AccountResponse(BaseModel):
     id: int
     username: str
     email: str
+    password: str
     total_games_played: int
     total_wins: int
     total_losses: int
@@ -36,6 +37,7 @@ class AccountResponse(BaseModel):
                 "id": "1",
                 "username": "Bob",
                 "email": "bob@hotmail.com",
+                "password": "hotbob112",
                 "total_games_played": "1",
                 "total_wins": "0",
                 "total_losses": "1",

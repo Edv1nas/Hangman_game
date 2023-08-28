@@ -7,6 +7,7 @@ from crud.account_crud import update_account_stats
 from crud.game_crud import get_game, update_game_status, get_account_id_from_game_id
 from crud. letter_crud import get_guessed_letters
 import string
+from schemas.letter_schemas import LetterCreate
 
 
 class Hangman:
@@ -71,7 +72,7 @@ class Hangman:
         db.refresh(game_data)
         return game_data
 
-    def play_game(self, db: Session, game_id: int, letter: str):
+    def play_game(self, db: Session, game_id: int, letter: LetterCreate):
         game_data = get_game(db, game_id)
 
         account_id = get_account_id_from_game_id(db, game_id)
@@ -81,8 +82,15 @@ class Hangman:
 
         self.guessed_letters = get_guessed_letters(db, game_id)
 
-        if len(letter) != 1 or letter not in string.ascii_lowercase:
-            raise ValueError("Invalid letter")
+        try:
+            if len(letter) != 1 or letter not in string.ascii_lowercase:
+                raise ValueError("Invalid letter")
+
+        except ValueError as ve:
+            return {
+                "error": "Invalid input",
+                "message": str(ve)
+            }
 
         if letter in self.guessed_letters:
             masked_word = self.mask_game_word()

@@ -1,0 +1,15 @@
+.hangman-image {
+    width: 600px;
+    /* Adjust this value as needed */
+    height: auto;
+    position: relative;
+    left: 0px;
+    top: -200px;
+    /* Maintain aspect ratio */
+}
+
+body {
+    background-color: black;
+    color: white;
+    /* Set text color to white for better visibility */
+}

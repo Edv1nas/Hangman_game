@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-# from crud.game_crud import calculate_win_loss_counts
 import crud.account_crud
 from crud.account_crud import create_account, get_account
 from database.db import get_db

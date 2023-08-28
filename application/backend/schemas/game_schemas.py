@@ -26,7 +26,7 @@ class GameCreate(BaseModel):
 class GameResponse(BaseModel):
     masked_word: str
     game_status: str
-    entered_letters: List
+    entered_letters: List[str]
     attempts: int
     message: str
 

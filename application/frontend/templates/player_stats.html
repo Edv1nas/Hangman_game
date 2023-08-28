@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Player Stats</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <h1>Player Stats</h1>
-    <p>Player Username: {{ account.username }}</p>
-    <p>Player Email: {{ account.email }}</p>
-    <!-- Other player stats can be displayed here -->
-    <p><a href="{{ url_for('index') }}">Back to Index</a></p>
-</body>
-</html>
+    {% if player_stats %}
+        <p>Games Played: {{ player_stats.total_games_played }}</p>
+        <p>Games Won: {{ player_stats.total_wins }}</p>
+        <p>Games Lost: {{ player_stats.total_losses }}</p>
+        <p>Games Win rate: {{ player_stats.win_rate }}</p>
+    {% else %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+{% endblock %}
+
+
+

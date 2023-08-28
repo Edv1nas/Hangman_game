@@ -1,38 +1,9 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <h2>Start Game</h2>
-        <img class="hangman-img" src="{{ url_for('static', filename='hangman.jpg') }}" alt="Hangman">
-        <button class="start-button">Start</button>
-    </div>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .start-button {
-            background-color: white;
-            color: black;
-            border: 2px solid white;
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .hangman-img {
-            max-width: 300px;
-            margin-bottom: 20px;
-        }
-    </style>
+  <h1>Welcome to Hangman Game!</h1>
+  <p>Click the button below to start a new game.</p>
+  <form action="{{ url_for('start_game', account_id=1) }}" method="post">
+      <button type="submit">Start New Game</button>
+  </form>
 {% endblock %}

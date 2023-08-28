@@ -1,3 +1,4 @@
 Pipfile
 Pipfile.lock
 README.md
+application/backend/db.sqlite

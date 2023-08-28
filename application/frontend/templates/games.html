@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Game History</h1>
+    <table>
+        <tr>
+            <th>Game ID</th>
+            <th>Game Word</th>
+            <th>Game Status</th>
+            <th>Attempts</th>
+        </tr>
+        {% if games %}
+            {% for game in games %}
+            <tr>
+                <td>{{ game.game_id }}</td>
+                <td>{{ game.game_word }}</td>
+                <td>{{ game.game_status }}</td>
+                <td>{{ game.attempts }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="4">{{ error_message }}</td>
+            </tr>
+        {% endif %}
+    </table>
+{% endblock %}
