@@ -7,7 +7,7 @@ from crud.account_crud import update_account_stats
 from crud.game_crud import get_game, update_game_status, get_account_id_from_game_id
 from crud. letter_crud import get_guessed_letters
 import string
-from schemas.letter_schemas import LetterCreate
+from schemas.letter_schemas import LetterResponse
 
 
 class Hangman:
@@ -72,7 +72,7 @@ class Hangman:
         db.refresh(game_data)
         return game_data
 
-    def play_game(self, db: Session, game_id: int, letter: LetterCreate):
+    def play_game(self, db: Session, game_id: int, letter: LetterResponse):
         game_data = get_game(db, game_id)
 
         account_id = get_account_id_from_game_id(db, game_id)

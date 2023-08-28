@@ -4,6 +4,6 @@
   <h1>Welcome to Hangman Game!</h1>
   <p>Click the button below to start a new game.</p>
   <form action="{{ url_for('start_game', account_id=1) }}" method="post">
-      <button type="submit">Start New Game</button>
+      <button type="submit" class="btn btn-outline-dark">Start New Game</button>
   </form>
 {% endblock %}

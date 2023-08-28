@@ -8,10 +8,16 @@ from crud.game_crud import get_games_history, get_game
 from database.db import get_db
 from schemas.game_schemas import GameCreate, GameResponse, GameHistoryResponse
 from schemas.account_schemas import AccountStats
-from schemas.letter_schemas import LetterCreate
+from schemas.letter_schemas import LetterResponse
+import string
 
 
 router = APIRouter()
+
+class StringInsteadOfLetterError(HTTPException):
+     def __init__(self, value):
+        detail = f"Invalid input: String '{value}' received instead of a letter."
+        super().__init__(status_code=403, detail=detail)
 
 
 @router.post("/create/{account_id}", response_model=GameCreate)
@@ -23,9 +29,14 @@ def create_game(account_id: int, db: Session = Depends(get_db)):
     return hangman_game.create_game(db, db_account.id)
 
 
-@router.post("/play/{game_id}")
-def play_hang_game(game_id: int, letter: LetterCreate, db: Session = Depends(get_db)):
+@router.post("/play/{game_id}", response_model=GameResponse)
+def play_hang_game(game_id: int, letter: LetterResponse, db: Session = Depends(get_db)):
     hangman_game = Hangman()
+    # casted_letter = str(letter)
+    # print(casted_letter)
+    # print(len(casted_letter))
+    # if len(casted_letter) != 10 or letter not in string.ascii_lowercase:
+    #     raise StringInsteadOfLetterError(letter)
     return hangman_game.play_game(db, game_id, letter.letter)
 
 

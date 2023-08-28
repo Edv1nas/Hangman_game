@@ -7,20 +7,28 @@
 color: #f2f2f2;">
     <h1>Hangman Game</h1>
     <p>Game Status: {{ game_data["game_status"] }}</p>
+    {%if game_data["game_status"] == 'in_progress'%}
     <p>Masked Word: {{ game_data["masked_word"] }}</p>
+    {%else%}
+    <p>Masked Word: {{ game_data["game_word"] }}</p>
+    {%endif%}
     <p>Remaining Attempts: {{ game_data["attempts"] }}</p>
     <p>Entered Letters: {{ game_data["entered_letters"] }}</p>
+    {%if game_data["game_status"] == 'in_progress'%}
+    
     <form action="{{ url_for('play_game', game_id=game_id) }}" method="post">
         <label for="letter">Guess a letter:</label>
-        <input type="text" id="letter" name="letter" maxlength="1" required>
+        <input type="text" id="letter" name="letter" maxlength="1" required pattern="[a-z]" title="Please enter a lowercase letter">
         <button type="submit">Guess</button>
     </form>
+    {%endif%}
     <p>{{ game_data["message"] }}</p>
+
+
 </div>
 <div class="game-container">
     <img src="{{ url_for('static', filename=image_filename) }}" alt="Hangman Image", class="hangman-image">
 </div>
-{% if error_message %}
-<div class="error">{{ error_message }}</div>
-{% endif %}
+
+
 {% endblock %}

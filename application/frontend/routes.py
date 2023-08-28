@@ -119,6 +119,11 @@ def start_game():
 def play_game(game_id):
     if request.method == "POST":
         letter = request.form["letter"]
+
+        if not isinstance(letter, str) or not letter.isalpha():
+            flash("Invalid input: Please enter a valid letter.", "error")
+            return redirect(f"/play_game/{game_id}")
+        
         lowercase_letter = letter.lower()
         data = {"letter": lowercase_letter}
         response = requests.post(

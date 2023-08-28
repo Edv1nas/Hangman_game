@@ -9,7 +9,7 @@ from pydantic import BaseModel
 #     letter: str
 
 
-class LetterCreate(BaseModel):
+class LetterResponse(BaseModel):
     letter: str
 
 

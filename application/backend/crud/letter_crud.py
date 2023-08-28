@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Session
-from schemas.letter_schemas import LetterCreate
 from models.letters import Letters
 
 
-def create_letter(db: Session, letter: LetterCreate, game_id: int):
+def create_letter(db: Session, letter: str, game_id: int):
     db_letter = Letters(**letter.dict(), game_id=game_id)
     db.add(db_letter)
     db.commit()
