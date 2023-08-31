@@ -11,7 +11,7 @@ class GameCreate(BaseModel):
     attempts: int
 
     class Config:
-        orm_model = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "game_id": "3",
@@ -31,7 +31,7 @@ class GameResponse(BaseModel):
     message: str
 
     class Config:
-        orm_model = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "masked_word": "l _ _ _ _ _",
@@ -52,7 +52,7 @@ class GameHistoryResponse(BaseModel):
     attempts: int
 
     class Config:
-        orm_model = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "account_id": "1",

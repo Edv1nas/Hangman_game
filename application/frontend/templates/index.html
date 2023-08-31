@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Welcome to Hangman Game!</h1>
-  <p>Click the button below to start a new game.</p>
-  <form action="{{ url_for('start_game', account_id=1) }}" method="post">
-      <button type="submit">Start New Game</button>
-  </form>
-</form>
+<h1>Welcome to Hangman Game!</h1>
+<div class="container mt-4">
+  <p class="fs-5 mb-1">Hangman is a simple word guessing game. Players try to figure out an unknown word by guessing letters.</p>
+  <p class="fs-5 mb-1">If too many letters which do not appear in the word are guessed, the player is hanged (and loses).</p>
+  <p class="fs-5 mb-1">In this game you have 10 bad guesses, if you use all 10 guesses you will be hanged and lose.</p>
+  <p class="fs-5 mb-1" >But if you guess the hidden word without using up all the attempts you will win the game and be the CHAMPION.</p>
+</div>
 {% endblock %}

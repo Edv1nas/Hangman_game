@@ -1,0 +1,46 @@
+version: "3.11"
+
+services:
+  backend-service:
+    container_name: fastapi
+    build:
+      context: .
+      dockerfile: application/backend/Dockerfile
+    ports:
+      - 1456:1456
+    depends_on:
+      - database
+    env_file:
+      - .env
+    networks:
+      - production
+
+  database:
+    container_name: hangman_database
+    image: postgres:15
+    volumes:
+      - postgre:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    env_file:
+      - .env
+    networks:
+      - production
+
+  frontend-service:
+    container_name: flask
+    build:
+      context: .
+      dockerfile: application/frontend/Dockerfile
+    ports:
+      - "1455:1455"
+    networks:
+      - production
+    depends_on:
+      - backend-service
+
+networks:
+  production:
+
+volumes:
+  postgre:

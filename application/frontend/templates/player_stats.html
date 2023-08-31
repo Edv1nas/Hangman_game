@@ -1,19 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Player Stats</h1>
-    {% if player_stats %}
-        <p>Games Played: {{ player_stats.total_games_played }}</p>
-        <p>Games Won: {{ player_stats.total_wins }}</p>
-        <p>Games Lost: {{ player_stats.total_losses }}</p>
-        <p>Games Win rate: {{ player_stats.win_rate }}</p>
-    {% else %}
-        <p>{{ error_message }}</p>
-    {% endif %}
-    <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
+<h1>Player Statistics</h1>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Games Played</th>
+                <th>Games Won</th>
+                <th>Games Lost</th>
+                <th>Games Win Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if player_stats %}
+                <tr>
+                    <td>{{ player_stats.total_games_played }}</td>
+                    <td>{{ player_stats.total_wins }}</td>
+                    <td>{{ player_stats.total_losses }}</td>
+                    <td>{{ player_stats.win_rate }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">{{ error_message }}</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
-
-
-

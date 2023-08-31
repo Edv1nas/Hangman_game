@@ -7,7 +7,7 @@
 color: #f2f2f2;">
     <h1>Hangman Game</h1>
     <p>Game Status: {{ game_data["game_status"] }}</p>
-    {%if game_data["game_status"] == 'in_progress'%}
+    {%if game_data["game_status"] == "in_progress"%}
     <p>Masked Word: {{ game_data["masked_word"] }}</p>
     {%else%}
     <p>Masked Word: {{ game_data["game_word"] }}</p>

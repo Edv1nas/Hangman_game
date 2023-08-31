@@ -10,7 +10,7 @@ class Game(Base):
     account_id = Column(Integer, ForeignKey("accounts.id"))
     game_date = Column(TIMESTAMP, default=datetime.now())
     game_status = Column(
-        Enum('in_progress', 'Victory', 'Defeat'), nullable=False)
+        Enum('in_progress', 'Victory', 'Defeat', name='game_status_types'), nullable=False)
     attempts = Column(Integer, nullable=False)
     game_word = Column(String(255), nullable=False)
 

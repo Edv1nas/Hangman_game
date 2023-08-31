@@ -8,7 +8,7 @@ class AccountCreate(BaseModel):
     password: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "username": "Bob",
@@ -31,7 +31,7 @@ class AccountResponse(BaseModel):
     is_active: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "id": "1",
@@ -55,7 +55,7 @@ class AccountStats(BaseModel):
     win_rate: float
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         json_schema_extra = {
             "example": {
                 "total_games_played": "1",

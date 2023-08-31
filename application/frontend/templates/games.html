@@ -16,30 +16,26 @@
             {% for game in games %}
             <tr>
 
-                <th scope="row"><a class="page-link" href="http://127.0.0.1:5000/play_game/{{game.game_id}}">{{game.game_id}}</a></th>
-                <td>{{ game.game_word }}</td>
-                {%if game.game_status == 'in_progress'%}
-                <td >
-                <div class="progress" data-toggle="tooltip" data-placement="left" title="{{game.game_status}}">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50" style="width: {{game.attempts*10}}%" ></div>
-                  </div>
-                </tb>
-
-                {%elif game.game_status == 'Victory'%}
-                <td>
-                <div class="progress" data-toggle="tooltip" data-placement="left" title="{{game.game_status}}">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50" style="width: 100%" ></div>
-                  </div>
-                </tb>
-
-                {%else %}
-                <td>
-                <div class="progress" data-toggle="tooltip" data-placement="left" title="{{game.game_status}}">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50" style="width: 100%" ></div>
-                  </div>
-                </tb>
-
+                <th scope="row"><a class="page-link" href="http://127.0.0.1:1455/play_game/{{game.game_id}}">{{game.game_id}}</a></th>
+                
+                {% if game.game_status == 'in_progress' %}
+                    <td>{{ game.masked_word }}</td>
+                {% else %}
+                    <td>{{ game.game_word }}</td>
                 {% endif %}
+                
+                <td>
+                    <div class="progress" data-toggle="tooltip" data-placement="left" title="{{game.game_status}}">
+                        {% if game.game_status == 'in_progress' %}
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50" style="width: {{game.attempts*10}}%" ></div>
+                        {% elif game.game_status == 'Victory' %}
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50" style="width: 100%" ></div>
+                        {% else %}
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50" style="width: 100%" ></div>
+                        {% endif %}
+                    </div>
+                </td>
+                
                 <td>{{ game.attempts }}</td>
             </tr>
         </tbody>
@@ -54,3 +50,9 @@
     </table>
 
 {% endblock %}
+
+
+
+
+
+

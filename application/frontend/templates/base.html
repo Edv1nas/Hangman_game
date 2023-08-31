@@ -28,10 +28,10 @@
             <ul class="navbar-nav me-auto">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Start game</a>
+                    <a class="nav-link" href="/start_game">Start Game</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/player_stats">Stats</a>
+                    <a class="nav-link" href="/player_stats">Player Statistics</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/game_history">Games History</a>
@@ -41,18 +41,18 @@
             <ul class="navbar-nav ml-auto">
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout">Log out</a>
+                    <a class="nav-link" href="/logout">Log Out</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/register">Registration</a>
+                    <a class="nav-link" href="/register">Sign Up</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/login">Log In</a>
                 </li>
-
-                {% endif %}
             </ul>
+                {% endif %}
+
         </div>
     </div>
 </nav>
